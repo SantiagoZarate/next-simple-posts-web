@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import Link from "../../node_modules/next/link";
+import Link from "next/link";
 
 interface Props extends PropsWithChildren {
   icon: JSX.Element,

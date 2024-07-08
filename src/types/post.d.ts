@@ -1,15 +1,7 @@
-export interface PostsApiResponse {
-  posts: Post[];
-  total: number;
-  skip:  number;
-  limit: number;
-}
-
 export interface Post {
-  id:        number;
-  title:     string;
-  body:      string;
-  userId:    number;
-  tags:      string[];
-  reactions: number;
+  id: number;
+  title: string;
+  content: string;
+  tags: string[];
+  created_at: Date
 }
