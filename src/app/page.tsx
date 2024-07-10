@@ -3,7 +3,7 @@ import { CreatePostForm } from "@/components/post/CreatePostForm";
 export default function HomePage() {
   return (
     <>
-      <div className="relative z-20 grid grid-cols-2 gap-8 max-w-screen-lg ">
+      <div className="relative z-20 grid grid-cols-2 gap-8 p-8 max-w-screen-lg ">
         <section className="flex flex-col gap-4">
           <h1 className="font-bold text-6xl">My simple posts nextjs web</h1>
           <p className="text-border">Im using zsa 'Zod Server Actions' to safelly type the inputs</p>

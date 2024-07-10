@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { createPostSchema } from "@/lib/zod-schema-validations/post"
+import { createPostSchema } from "@/utils/zod-schema-validations/post"
 import { createPost } from "@/actions"
 
 type FormSchemaType = z.infer<typeof createPostSchema>

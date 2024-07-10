@@ -1,5 +1,7 @@
-import { createPostSchema } from "./lib/zod-schema-validations/post";
-import { authenticatedProcedure } from "./lib/zsa-procedures";
+'use server'
+
+import { createPostSchema } from "./utils/zod-schema-validations/post";
+import { authenticatedProcedure } from "./utils/zsa-procedures";
 import { redirect } from "next/navigation";
 
 export const createPost = authenticatedProcedure
@@ -8,6 +10,8 @@ export const createPost = authenticatedProcedure
   .handler(
     async ({ input, ctx }) => {
       const { user, supabase } = ctx
+
+      console.log("Creando post")
 
       const { data, error } = await supabase
         .from("post")

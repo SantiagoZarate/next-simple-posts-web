@@ -1,18 +1,27 @@
-import { createClient } from "@/lib/supabase/server";
+'use server'
+
+import { createClient } from "@/utils/supabase/server";
 import { Post } from "@/types/post";
-import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export async function PostsList() {
-  const cookiesStore = cookies()
-  const supabase = createClient(cookiesStore)
-  const res = await supabase.from('post').select()
-  const data = res.data as Post[]
+  const supabase = await createClient()
+
+  let { data: post, error } = await supabase
+    .from('post')
+    .select('*')
+
+  console.log(post)
+
+  if (error) {
+    redirect("/")
+  }
 
   return (
     <ul className="flex flex-col gap-2">
       {
-        data?.map(post => (
+        post?.map(post => (
           <Link
             className="hover:-translate-y-1 transition"
             href={'/posts/' + post.id}
