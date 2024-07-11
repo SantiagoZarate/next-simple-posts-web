@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from "@/utils/supabase/server";
-import { Post } from "@/types/post";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

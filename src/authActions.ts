@@ -1,8 +1,11 @@
+'use server'
+
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
 import { signInSchema, signUpSchema } from "./utils/zod-schema-validations/auth";
 import { baseProcedure } from "./utils/zsa-procedures";
 import { ZSAError } from 'zsa'
-import { redirect } from "next/navigation";
 
 export const signIn = baseProcedure
   .createServerAction()
@@ -11,7 +14,7 @@ export const signIn = baseProcedure
     const res = await ctx.authService.signIn(input)
 
     if (res.error) {
-      throw new ZSAError("ERROR")
+      throw new ZSAError("ERROR", res.error)
     }
 
     revalidatePath('/', 'layout')

@@ -21,6 +21,10 @@ export class AuthenticationService {
       password: password,
     })
 
+    if (res.error) {
+      throw new Error("Authentication error")
+    }
+
     return res
   }
 }

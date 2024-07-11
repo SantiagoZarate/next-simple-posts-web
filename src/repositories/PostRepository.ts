@@ -1,8 +1,9 @@
-import { IPostDTO } from "@/dtos"
+import { PostDTO } from "@/dtos/postDTO"
 import { createClient } from "@/utils/supabase/server"
-import { } from '@supabase/ssr'
+import { IPostRepository } from "."
+import { PostDelete, PostUpdate, PostInsert } from "@/types/post"
 
-export class PostRepository {
+export class PostRepository implements IPostRepository {
   private _db: ReturnType<typeof createClient>
   private _tableName = "post"
 
@@ -10,7 +11,15 @@ export class PostRepository {
     this._db = createClient()
   }
 
-  async create(data: IPostDTO) {
+  delete(id: PostDelete): Promise<PostDTO> {
+    throw new Error("Method not implemented.")
+  }
+
+  update(id: PostUpdate): Promise<PostDTO> {
+    throw new Error("Method not implemented.")
+  }
+
+  async create(data: PostInsert) {
     const res = await this._db
       .from(this._tableName)
       .insert(data)
@@ -21,7 +30,7 @@ export class PostRepository {
       throw new Error("Error creating a new post")
     }
 
-    return res.data
+    return PostDTO.fromData(res.data)
   }
 
   async getAll() {
@@ -30,9 +39,10 @@ export class PostRepository {
       .select("*")
 
     if (res.error) {
-      throw new Error("Error creating a new post")
+      throw new Error("Error while getting posts")
     }
 
-    return res.data
+    const posts: PostDTO[] = res.data.map(post => PostDTO.fromData(post))
+    return posts
   }
 }

@@ -1,4 +1,3 @@
-import { IPostDTO } from "@/dtos";
 import { PostDTO } from "@/dtos/postDTO";
 import { PostRepository } from "@/repositories/PostRepository";
 
@@ -9,8 +8,8 @@ export class PostService {
     this._repository = repository
   }
 
-  async getAll(): Promise<IPostDTO[]> {
-    const rawPosts = await this._repository.getAll()
-    return rawPosts.map(rawPost => PostDTO.fromData(rawPost))
+  async getAll(): Promise<PostDTO[]> {
+    const results = await this._repository.getAll()
+    return results
   }
 }
