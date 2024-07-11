@@ -1,26 +1,17 @@
 'use server'
 
-import { createClient } from "@/utils/supabase/server";
+import { PostService } from "@/services/postService";
+import { ServiceLocator } from "@/services/serviceLocator";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export async function PostsList() {
-  const supabase = await createClient()
-
-  let { data: post, error } = await supabase
-    .from('post')
-    .select('*')
-
-  console.log(post)
-
-  if (error) {
-    redirect("/")
-  }
+  const service = await ServiceLocator.getService("PostService")
+  const posts = await service.getAll()
 
   return (
     <ul className="flex flex-col gap-2">
       {
-        post?.map(post => (
+        posts?.map(post => (
           <Link
             className="hover:-translate-y-1 transition"
             href={'/posts/' + post.id}

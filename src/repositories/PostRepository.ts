@@ -4,11 +4,15 @@ import { IPostRepository } from "."
 import { PostDelete, PostUpdate, PostInsert } from "@/types/post"
 
 export class PostRepository implements IPostRepository {
-  private _db: ReturnType<typeof createClient>
+  private _db!: ReturnType<typeof createClient>
   private _tableName = "post"
 
-  constructor() {
-    this._db = createClient()
+  private constructor(db: ReturnType<typeof createClient>) {
+    this._db = db
+  }
+
+  static async create(): Promise<PostRepository> {
+    return new PostRepository(await createClient());
   }
 
   delete(id: PostDelete): Promise<PostDTO> {
