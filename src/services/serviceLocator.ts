@@ -2,33 +2,56 @@ import { PostRepository } from "@/repositories/PostRepository"
 import { PostService } from "./postService"
 import { AuthenticationService } from "./authenticationService"
 
-type ServiceInstances = {
+interface ServiceMap {
   PostService: PostService;
   AuthenticationService: AuthenticationService;
 };
 
-export class ServiceLocator {
-  private static _services: Partial<ServiceInstances> = {}
+interface RepositoryMap {
+  PostRepository: PostRepository
+}
 
-  static async getService<T extends keyof ServiceInstances>(svc: T): Promise<ServiceInstances[T]> {
-    if (this._services[svc]) {
-      // Service had been already created and its retrieved from cache
-      return this._services[svc] as ServiceInstances[T];
+export class ServiceLocator {
+  private static _serviceCache: Partial<Record<keyof ServiceMap, any>> = {}
+  private static _repositoryCache: Partial<Record<keyof RepositoryMap, any>> = {}
+
+  private static _serviceFactory: { [K in keyof ServiceMap]: () => Promise<ServiceMap[K]> } = {
+    AuthenticationService: async () => new AuthenticationService(),
+    PostService: async () => {
+      const postRepository = await this.getOrCreateRepository("PostRepository");
+      return new PostService(postRepository);
+    }
+  }
+
+  private static _repositoryFactory: { [K in keyof RepositoryMap]: () => Promise<RepositoryMap[K]> } = {
+    PostRepository: async () => PostRepository.create()
+  }
+
+  private static async getOrCreateRepository<T extends keyof RepositoryMap>(repositoryName: T) {
+    let repository = this._repositoryCache[repositoryName]
+
+    if (repository) {
+      console.log("Returning cached repository")
+      return repository
+    }
+
+    console.log("Creating repository and saving it to cache")
+    repository = this._repositoryFactory[repositoryName]
+    this._repositoryCache[repositoryName] = repository
+    return repository
+  }
+
+  static async getService<T extends keyof ServiceMap>(serviceName: T): Promise<ServiceMap[T]> {
+    let service = this._serviceCache[serviceName]
+
+    if (service) {
+      // Returning cached service
+      return service;
     }
 
     // Service needs to be created and then cached for further service requests
-    if (svc === "PostService") {
-      const postRepository = await PostRepository.create();
-      const postService = new PostService(postRepository);
-      this._services[svc] = postService as ServiceInstances[T];
-      return postService as ServiceInstances[T];
-    }
-
-    if (svc === "AuthenticationService") {
-      const authService = new AuthenticationService()
-      this._services[svc] = authService as ServiceInstances[T]
-      return authService as ServiceInstances[T];
-    }
-    throw new Error(`Service ${svc} not recognized`);
+    service = await this._serviceFactory[serviceName]()
+    this._serviceCache[serviceName] = service
+    return service
   }
 }
