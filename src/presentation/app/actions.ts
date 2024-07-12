@@ -1,28 +1,42 @@
 'use server'
 
-import { createClient } from "@/utils/supabase/server";
-import { revalidatePath } from "next/cache";
+import { ServiceLocator } from "@/services/serviceLocator";
+import { createPostSchema } from "../../utils/zod-schema-validations/post";
+import { authenticatedProcedure } from "../../utils/zsa-procedures";
 import { redirect } from "next/navigation";
+import { ZSAError } from "zsa";
+import { CreatePostError } from "@/shared/errors/postErrors";
 
-export async function login(formData: FormData) {
-  const supabase = createClient()
-  console.log("Corriendo action")
-  console.log()
-  console.log()
+export const createPost = authenticatedProcedure
+  .createServerAction()
+  .input(createPostSchema)
+  .handler(async ({ input }) => {
+    console.log("Creando post")
+    const postService = ServiceLocator.getService("PostService")
 
-  const data = {
-    title: formData.get("title") as string,
-    content: formData.get("content") as string,
-  }
+    let newPost;
 
-  const { error } = await supabase
-    .from('post')
-    .insert(data)
+    try {
+      newPost = await postService.create(input)
+    } catch (error) {
+      if (error instanceof CreatePostError) {
+        throw new ZSAError("ERROR", "Error creating post")
+      }
+      throw new ZSAError("ERROR", error)
+    }
 
-  if (error) {
-    redirect('/error')
-  }
+    redirect(`/app/post/${newPost.id}`)
+  })
 
-  revalidatePath('/', 'layout')
-  redirect('/')
-}
+export const deletePost = authenticatedProcedure
+  .createServerAction()
+  .handler(async ({ request, ctx }) => {
+    const { supabase, user } = ctx
+
+    const paramQuery = request!.url ?? 1
+
+    const { data } = await supabase
+      .from("post")
+      .delete()
+      .eq('id', paramQuery)
+  })

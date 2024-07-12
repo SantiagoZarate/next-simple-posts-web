@@ -41,7 +41,7 @@ export class PostRepository implements IPostRepository {
     return PostDTO.fromData(data)
   }
 
-  async create(data: PostInsert) {
+  async create(data: PostInsert, userID: string) {
     const res = await this._db
       .from(this._tableName)
       .insert(data)

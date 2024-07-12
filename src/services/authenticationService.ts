@@ -12,7 +12,16 @@ export class AuthenticationService {
   constructor() { }
 
   async getUser() {
-    const res = await this._supabase.auth.getUser()
+    const { data } = await this._supabase.auth.getUser()
+
+    if (!data.user) {
+      throw new Error("Error getting user")
+    }
+
+    return {
+      id: data.user.id,
+      role: data.user.role
+    }
   }
 
   async signIn({ email, password }: SignInType) {

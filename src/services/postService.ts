@@ -36,6 +36,12 @@ export class PostService {
     return post
   }
 
+  async create(data: PostInsert) {
+    const user = await this._authService.getUser()
+    const results = await this._postRepository.create(data, user.id)
+    return results
+  }
+
   async update({ content, id, title }: PostUpdate) {
     const oldPost = await this.getPostForUser({ id })
 

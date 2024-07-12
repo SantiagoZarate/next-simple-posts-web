@@ -17,7 +17,8 @@ import {
 } from "@/presentation/components/ui/form"
 import { Input } from "@/presentation/components/ui/input"
 import { createPostSchema } from "@/utils/zod-schema-validations/post"
-import { createPost } from "@/actions"
+import { toast } from "@/components/ui/use-toast"
+import { createPost } from "@/presentation/app/actions"
 
 type FormSchemaType = z.infer<typeof createPostSchema>
 
@@ -31,11 +32,11 @@ export function CreatePostForm() {
   })
 
   const { execute } = useServerAction(createPost, {
-    onError: () => {
-      console.log("There was an error")
+    onError: ({ err }) => {
+      toast({ title: err.message })
     },
     onSuccess: () => {
-      console.log("Post created succesfully")
+      toast({ title: "Post created succesfully" })
     }
   })
 

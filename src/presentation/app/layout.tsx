@@ -2,6 +2,7 @@ import { Header } from "@/presentation/components/common/Header";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Header />
+        <Toaster />
         <section className="min-h-screen pt-12 bg-background text-primary flex items-center justify-center">
           {children}
         </section>

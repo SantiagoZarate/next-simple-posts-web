@@ -4,7 +4,7 @@ import { PostInsert, PostDelete, PostUpdate } from "@/types/post";
 export interface IPostRepository {
   getAll(): Promise<PostDTO[]>
 
-  create(data: PostInsert): Promise<PostDTO>
+  create(data: PostInsert, userID: string): Promise<PostDTO>
 
   delete(id: PostDelete): Promise<PostDTO>
 
