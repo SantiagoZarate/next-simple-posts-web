@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useServerAction } from 'zsa-react'
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/presentation/components/ui/button"
 import {
   Form,
   FormControl,
@@ -14,8 +14,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/presentation/components/ui/form"
+import { Input } from "@/presentation/components/ui/input"
 import { createPostSchema } from "@/utils/zod-schema-validations/post"
 import { createPost } from "@/actions"
 

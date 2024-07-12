@@ -1,6 +1,6 @@
-import { PostRepository } from "@/repositories/PostRepository"
 import { PostService } from "./postService"
 import { AuthenticationService } from "./authenticationService"
+import { PostRepository } from "@/repository/PostRepository";
 
 interface ServiceMap {
   PostService: PostService;
@@ -15,19 +15,19 @@ export class ServiceLocator {
   private static _serviceCache: Partial<Record<keyof ServiceMap, any>> = {}
   private static _repositoryCache: Partial<Record<keyof RepositoryMap, any>> = {}
 
-  private static _serviceFactory: { [K in keyof ServiceMap]: () => Promise<ServiceMap[K]> } = {
-    AuthenticationService: async () => new AuthenticationService(),
-    PostService: async () => {
-      const postRepository = await this.getOrCreateRepository("PostRepository");
+  private static _serviceFactory: { [K in keyof ServiceMap]: () => ServiceMap[K] } = {
+    AuthenticationService: () => new AuthenticationService(),
+    PostService: () => {
+      const postRepository = this.getOrCreateRepository("PostRepository");
       return new PostService(postRepository);
     }
   }
 
-  private static _repositoryFactory: { [K in keyof RepositoryMap]: () => Promise<RepositoryMap[K]> } = {
-    PostRepository: async () => PostRepository.create()
+  private static _repositoryFactory: { [K in keyof RepositoryMap]: () => RepositoryMap[K] } = {
+    PostRepository: () => new PostRepository()
   }
 
-  private static async getOrCreateRepository<T extends keyof RepositoryMap>(repositoryName: T) {
+  private static getOrCreateRepository<T extends keyof RepositoryMap>(repositoryName: T) {
     let repository = this._repositoryCache[repositoryName]
 
     if (repository) {
@@ -41,7 +41,7 @@ export class ServiceLocator {
     return repository
   }
 
-  static async getService<T extends keyof ServiceMap>(serviceName: T): Promise<ServiceMap[T]> {
+  static getService<T extends keyof ServiceMap>(serviceName: T): ServiceMap[T] {
     let service = this._serviceCache[serviceName]
 
     if (service) {
@@ -50,7 +50,7 @@ export class ServiceLocator {
     }
 
     // Service needs to be created and then cached for further service requests
-    service = await this._serviceFactory[serviceName]()
+    service = this._serviceFactory[serviceName]()
     this._serviceCache[serviceName] = service
     return service
   }

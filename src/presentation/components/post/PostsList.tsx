@@ -1,6 +1,5 @@
 'use server'
 
-import { PostService } from "@/services/postService";
 import { ServiceLocator } from "@/services/serviceLocator";
 import Link from "next/link";
 

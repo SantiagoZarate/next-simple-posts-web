@@ -1,8 +1,8 @@
 'use client'
 
 import { links } from "@/data/constants";
-import Link from "../../../node_modules/next/link";
-import { usePathname } from "../../../node_modules/next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function NavLinksBar() {
   const currentLocation = usePathname();

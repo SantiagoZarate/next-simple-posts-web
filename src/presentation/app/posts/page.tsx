@@ -1,8 +1,8 @@
-import { CategoryIcon } from "@/components/icons/CategoryIcon";
-import { SparkleIcon } from "@/components/icons/SparkleIcon";
-import { PostsSkeleton } from "@/components/post/PostSkeleton";
-import { PostsLinkCard } from "@/components/post/PostsLinkCard";
-import { PostsList } from "@/components/post/PostsList";
+import { CategoryIcon } from "@/presentation/components/icons/CategoryIcon";
+import { SparkleIcon } from "@/presentation/components/icons/SparkleIcon";
+import { PostsSkeleton } from "@/presentation/components/post/PostSkeleton";
+import { PostsLinkCard } from "@/presentation/components/post/PostsLinkCard";
+import { PostsList } from "@/presentation/components/post/PostsList";
 import { Suspense } from 'react';
 
 export default function BlogsPages() {

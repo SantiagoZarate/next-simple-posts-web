@@ -1,4 +1,4 @@
-import { PostDTO } from "@/dtos/postDTO";
+import { PostDTO } from "@/shared/dtos/postDTO";
 import { PostInsert, PostDelete, PostUpdate } from "@/types/post";
 
 export interface IPostRepository {
@@ -8,5 +8,7 @@ export interface IPostRepository {
 
   delete(id: PostDelete): Promise<PostDTO>
 
-  update(id: PostUpdate): Promise<PostDTO>
+  update(id: Pick<PostDTO, "id">, newData: PostInsert): Promise<PostDTO>
+
+  getById(id: Pick<PostDTO, "id">): Promise<PostDTO>
 }
