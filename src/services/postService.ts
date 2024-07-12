@@ -29,6 +29,11 @@ export class PostService {
     return results
   }
 
+  async getByID({ id }: PostID) {
+    const post = await this._postRepository.getById({ id })
+    return post
+  }
+
   async getPostForUser({ id }: PostID) {
     const user = await this._authService.getUser()
     const post = await this._postRepository.getById({ id })

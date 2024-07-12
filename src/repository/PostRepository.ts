@@ -2,6 +2,8 @@ import { PostDTO } from "@/shared/dtos/postDTO"
 import { PostDelete, PostInsert } from "@/types/post"
 import { createClient } from "@/utils/supabase/server"
 import { IPostRepository } from "."
+import { Tables } from "../../supabase/types.gen"
+import { RawPost } from "@/types/supabase"
 
 export class PostRepository implements IPostRepository {
   private _tableName = "post"
@@ -91,14 +93,15 @@ export class PostRepository implements IPostRepository {
     const db = await createClient()
     const { data, error } = await db
       .from(this._tableName)
-      .select("*")
+      .select("*,category(*)")
       .eq("id", id)
-      .select()
       .single()
 
     if (error) {
       throw new Error("Error while getting post by id")
     }
+
+    console.log(data)
 
     return PostDTO.fromData(data)
   }

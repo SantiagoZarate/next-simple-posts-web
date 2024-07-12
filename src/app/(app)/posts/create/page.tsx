@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useServerAction } from 'zsa-react'
 
-import { Button } from "../ui/button"
 import {
   Form,
   FormControl,
@@ -14,15 +13,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form"
-import { Input } from "../ui/input"
+} from "@/app/components/ui/form"
 import { createPostSchema } from "@/utils/zod-schema-validations/post"
-import { toast } from "../ui/use-toast"
 import { createPost } from '@/app/(app)/actions'
+import { Button } from "@/app/components/ui/button"
+import { Input } from "@/app/components/ui/input"
+import { toast } from "@/app/components/ui/use-toast"
 
 type FormSchemaType = z.infer<typeof createPostSchema>
 
-export function CreatePostForm() {
+export default function CreatePostPage() {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {

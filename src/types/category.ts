@@ -1,0 +1,1 @@
+import { RawCategory } from './supabase'
