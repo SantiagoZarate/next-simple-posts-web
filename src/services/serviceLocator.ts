@@ -36,7 +36,7 @@ export class ServiceLocator {
     }
 
     console.log("Creating repository and saving it to cache")
-    repository = this._repositoryFactory[repositoryName]
+    repository = this._repositoryFactory[repositoryName]()
     this._repositoryCache[repositoryName] = repository
     return repository
   }

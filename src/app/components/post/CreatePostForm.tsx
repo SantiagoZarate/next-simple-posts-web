@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useServerAction } from 'zsa-react'
 
-import { Button } from "@/presentation/components/ui/button"
+import { Button } from "../ui/button"
 import {
   Form,
   FormControl,
@@ -14,11 +14,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/presentation/components/ui/form"
-import { Input } from "@/presentation/components/ui/input"
+} from "../ui/form"
+import { Input } from "../ui/input"
 import { createPostSchema } from "@/utils/zod-schema-validations/post"
-import { toast } from "@/components/ui/use-toast"
-import { createPost } from "@/presentation/app/actions"
+import { toast } from "../ui/use-toast"
+import { createPost } from '@/app/(app)/actions'
 
 type FormSchemaType = z.infer<typeof createPostSchema>
 

@@ -4,15 +4,13 @@ import { createClient } from "@/utils/supabase/server"
 import { IPostRepository } from "."
 
 export class PostRepository implements IPostRepository {
-  private _db: ReturnType<typeof createClient>
   private _tableName = "post"
 
-  constructor() {
-    this._db = createClient()
-  }
+  constructor() { }
 
   async delete({ id }: PostDelete): Promise<PostDTO> {
-    const { data, error } = await this._db
+    const db = await createClient()
+    const { data, error } = await db
       .from(this._tableName)
       .delete()
       .eq("id", id)
@@ -27,7 +25,9 @@ export class PostRepository implements IPostRepository {
   }
 
   async update({ id }: Pick<PostDTO, "id">, newData: PostInsert): Promise<PostDTO> {
-    const { error, data } = await this._db.
+    const db = await createClient()
+
+    const { error, data } = await db.
       from(this._tableName)
       .update(newData)
       .eq("id", id)
@@ -42,7 +42,9 @@ export class PostRepository implements IPostRepository {
   }
 
   async create(data: PostInsert, userID: string) {
-    const res = await this._db
+    const db = await createClient()
+
+    const res = await db
       .from(this._tableName)
       .insert(data)
       .select()
@@ -56,7 +58,9 @@ export class PostRepository implements IPostRepository {
   }
 
   async getAll() {
-    const res = await this._db
+    const db = await createClient()
+
+    const res = await db
       .from(this._tableName)
       .select("*")
 
@@ -69,7 +73,8 @@ export class PostRepository implements IPostRepository {
   }
 
   async getById({ id }: Pick<PostDTO, "id">): Promise<PostDTO> {
-    const { data, error } = await this._db
+    const db = await createClient()
+    const { data, error } = await db
       .from(this._tableName)
       .select("*")
       .eq("id", id)

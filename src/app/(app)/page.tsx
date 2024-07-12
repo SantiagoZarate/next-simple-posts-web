@@ -1,4 +1,4 @@
-import { CreatePostForm } from "@/presentation/components/post/CreatePostForm";
+import { CreatePostForm } from "@/app/components/post/CreatePostForm";
 
 export default function HomePage() {
   return (

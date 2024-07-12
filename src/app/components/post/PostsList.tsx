@@ -4,8 +4,8 @@ import { ServiceLocator } from "@/services/serviceLocator";
 import Link from "next/link";
 
 export async function PostsList() {
-  const service = await ServiceLocator.getService("PostService")
-  const posts = await service.getAll()
+  const postService = await ServiceLocator.getService("PostService")
+  const posts = await postService.getAll()
 
   return (
     <ul className="flex flex-col gap-2">
