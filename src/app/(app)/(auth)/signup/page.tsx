@@ -16,21 +16,21 @@ import {
 } from "@/app/components/ui/form"
 import { Input } from "@/app/components/ui/input"
 import { toast } from "@/app/components/ui/use-toast"
-import { SignUpType } from "@/utils/zod-schema-validations/auth"
-import { createPostSchema } from "@/utils/zod-schema-validations/post"
+import { SignUpType, signInSchema, signUpSchema } from "@/utils/zod-schema-validations/auth"
 import { signup } from "./actions"
 import Link from "next/link"
 
 export default function SignUpPage() {
   const form = useForm<SignUpType>({
-    resolver: zodResolver(createPostSchema),
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: "",
-      password: ""
+      password: "",
+      username: ""
     }
   })
 
-  const { execute } = useServerAction(signup, {
+  const { execute, isPending } = useServerAction(signup, {
     onError: ({ err }) => {
       toast({ title: err.message })
     },
@@ -42,7 +42,7 @@ export default function SignUpPage() {
   return (
     <div className="flex flex-col gap-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(execute)} className="space-y-8">
+        <form onSubmit={form.handleSubmit((data) => execute(data))} className="space-y-8">
           <FormField
             control={form.control}
             name="email"
@@ -75,7 +75,29 @@ export default function SignUpPage() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="lionel_messi_10" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is your password
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" disabled={isPending}>
+            {
+              isPending
+                ? "Sending..."
+                : "Submit"
+            }
+          </Button>
         </form>
       </Form>
       <footer className="flex justify-center">

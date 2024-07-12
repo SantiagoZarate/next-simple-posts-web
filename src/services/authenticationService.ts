@@ -7,12 +7,12 @@ import { SignInType, SignUpType } from "@/utils/zod-schema-validations/auth";
 // }
 
 export class AuthenticationService {
-  private _supabase = createClient()
-
   constructor() { }
 
   async getUser() {
-    const { data } = await this._supabase.auth.getUser()
+    const supabase = await createClient()
+
+    const { data } = await supabase.auth.getUser()
 
     if (!data.user) {
       throw new Error("Error getting user")
@@ -25,7 +25,8 @@ export class AuthenticationService {
   }
 
   async signIn({ email, password }: SignInType) {
-    const res = await this._supabase.auth.signInWithPassword({
+    const supabase = await createClient()
+    const res = await supabase.auth.signInWithPassword({
       email: email,
       password: password
     })
@@ -34,16 +35,18 @@ export class AuthenticationService {
   }
 
   async signUp({ email, password }: SignUpType) {
-    const res = await this._supabase.auth.signUp({
-      email: email,
-      password: password,
+    const supabase = await createClient()
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
     })
 
-    if (res.error) {
+    if (error) {
       throw new Error("Authentication error")
     }
 
-    return res
+    return data
   }
 }
 
