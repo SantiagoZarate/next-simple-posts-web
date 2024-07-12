@@ -72,6 +72,21 @@ export class PostRepository implements IPostRepository {
     return posts
   }
 
+  async getAllByQuery(query: string) {
+    const db = await createClient()
+
+    const { data, error } = await db
+      .from(this._tableName)
+      .select("*")
+      .like("title", `%${query}%`)
+
+    if (error) {
+      throw new Error("Error while getting posts by query")
+    }
+
+    return data.map(post => PostDTO.fromData(post))
+  }
+
   async getById({ id }: Pick<PostDTO, "id">): Promise<PostDTO> {
     const db = await createClient()
     const { data, error } = await db

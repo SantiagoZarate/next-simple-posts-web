@@ -18,6 +18,11 @@ export class PostService {
     return results
   }
 
+  async getAllByQuery(query: string): Promise<PostDTO[]> {
+    const results = await this._postRepository.getAllByQuery(query)
+    return results
+  }
+
   async delete({ id }: PostDelete): Promise<PostDTO> {
     const post = await this.getPostForUser({ id });
     const results = await this._postRepository.delete({ id: post.id })

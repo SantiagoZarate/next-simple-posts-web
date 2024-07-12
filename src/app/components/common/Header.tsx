@@ -8,7 +8,7 @@ export function Header() {
       <div className="w-full flex justify-between items-center max-w-screen-lg mx-auto">
         <NavLinksBar />
         <div>
-          <Link href={'/login'}>
+          <Link href={'/signin'}>
             <Button>
               Login
             </Button>

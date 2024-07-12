@@ -19,6 +19,7 @@ import { toast } from "@/app/components/ui/use-toast"
 import { SignUpType } from "@/utils/zod-schema-validations/auth"
 import { createPostSchema } from "@/utils/zod-schema-validations/post"
 import { signup } from "./actions"
+import Link from "next/link"
 
 export default function SignUpPage() {
   const form = useForm<SignUpType>({
@@ -39,7 +40,7 @@ export default function SignUpPage() {
   })
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(execute)} className="space-y-8">
           <FormField
@@ -77,6 +78,11 @@ export default function SignUpPage() {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
+      <footer className="flex justify-center">
+        <Link href={"/signin"}>
+          <p className="hover:underline">You already have an account?, sign in!</p>
+        </Link>
+      </footer>
     </div>
   )
 }
