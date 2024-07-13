@@ -16,21 +16,27 @@ import {
 } from "@/app/components/ui/form"
 import { Input } from "@/app/components/ui/input"
 import { toast } from "@/app/components/ui/use-toast"
-import { SignInType } from "@/utils/zod-schema-validations/auth"
-import { createPostSchema } from "@/utils/zod-schema-validations/post"
+import { SignInType, signInSchema } from "@/utils/zod-schema-validations/auth"
 import { login } from "./actions"
 import Link from "next/link"
+import { useState } from "react"
 
 export default function LoginPage() {
+  const [visiblePassword, setVisiblePassword] = useState(false)
+
+  const togglePasswordVisibility = () => {
+    setVisiblePassword(!visiblePassword)
+  }
+
   const form = useForm<SignInType>({
-    resolver: zodResolver(createPostSchema),
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: ""
     }
   })
 
-  const { execute } = useServerAction(login, {
+  const { execute, isPending } = useServerAction(login, {
     onError: ({ err }) => {
       toast({ title: err.message })
     },
@@ -42,7 +48,7 @@ export default function LoginPage() {
   return (
     <div className="flex flex-col gap-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(execute)} className="space-y-8">
+        <form onSubmit={form.handleSubmit((data) => execute(data))} className="space-y-8">
           <FormField
             control={form.control}
             name="email"
@@ -66,8 +72,11 @@ export default function LoginPage() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="*****" {...field} />
+                  <Input
+                    type={visiblePassword ? "text" : "password"}
+                    placeholder={visiblePassword ? "secret-pass" : "********"} {...field} />
                 </FormControl>
+                <button className="size-4 bg-neutral-500 border border-border rounded-full" type="button" onClick={togglePasswordVisibility} />
                 <FormDescription>
                   This is your password
                 </FormDescription>
@@ -75,7 +84,7 @@ export default function LoginPage() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button disabled={isPending} type="submit">Submit</Button>
         </form>
       </Form>
       <footer className="flex justify-center">

@@ -13,7 +13,7 @@ export const signup = createServerAction()
     const authService = ServiceLocator.getService("AuthenticationService")
 
     try {
-      authService.signUp(input)
+      await authService.signUp(input)
     } catch (error) {
       throw new ZSAError("ERROR", error)
     }

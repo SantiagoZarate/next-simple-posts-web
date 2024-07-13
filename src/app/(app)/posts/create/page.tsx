@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { FetchCategories } from "./fetchCategories";
 
-export default function CreatePostPage() {
+export default async function CreatePostPage() {
   return (
     <section className="flex flex-col gap-8">
       <header>

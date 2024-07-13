@@ -16,9 +16,9 @@ import {
 } from "@/app/components/ui/form"
 import { Input } from "@/app/components/ui/input"
 import { toast } from "@/app/components/ui/use-toast"
-import { SignUpType, signInSchema, signUpSchema } from "@/utils/zod-schema-validations/auth"
-import { signup } from "./actions"
+import { SignUpType, signUpSchema } from "@/utils/zod-schema-validations/auth"
 import Link from "next/link"
+import { signup } from "./actions"
 
 export default function SignUpPage() {
   const form = useForm<SignUpType>({
@@ -35,7 +35,7 @@ export default function SignUpPage() {
       toast({ title: err.message })
     },
     onSuccess: () => {
-      toast({ title: "Logged in" })
+      toast({ title: "Signed up!" })
     }
   })
 
@@ -80,12 +80,12 @@ export default function SignUpPage() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input placeholder="lionel_messi_10" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is your password
+                  This is your username
                 </FormDescription>
                 <FormMessage />
               </FormItem>

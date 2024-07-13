@@ -1,11 +1,6 @@
+import { AuthError } from "@/shared/errors/authErrors";
 import { createClient } from "@/utils/supabase/server";
 import { SignInType, SignUpType } from "@/utils/zod-schema-validations/auth";
-import error from "next/error";
-
-// interface IAuthenticationService {
-//   signIn(data: SignInType): Promise<UserDTO>
-//   signUp(data: SignUpType): Promise<>
-// }
 
 export class AuthenticationService {
   constructor() { }
@@ -39,14 +34,16 @@ export class AuthenticationService {
     }
   }
 
-  async signIn({ email, password }: SignInType) {
+  async signIn(credentials: SignInType) {
     const supabase = await createClient()
-    const res = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password
+    const { error } = await supabase.auth.signInWithPassword({
+      email: credentials.email,
+      password: credentials.password
     })
 
-    return res
+    if (error) {
+      throw new AuthError("Invalid credentials")
+    }
   }
 
   async signUp({ email, password, username }: SignUpType) {

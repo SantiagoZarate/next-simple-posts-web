@@ -2,10 +2,16 @@ import Link from "next/link"
 import { Button } from "../ui/button"
 import { NavLinksBar } from "./NavLinksBar"
 import { ServiceLocator } from "@/services/serviceLocator"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
 
 export async function Header() {
-  const authService = ServiceLocator.getService("AuthenticationService")
-  const { id } = await authService.userSession()
+  // const authService = ServiceLocator.getService("AuthenticationService")
+  // const { id } = await authService.userSession()
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.getUser()
+  const isLogged = data.user !== null
+  console.log(data.user)
 
   return (
     <header className="absolute  w-full px-8 py-6">
@@ -18,7 +24,7 @@ export async function Header() {
             </Button>
           </Link>
           {
-            id
+            isLogged
               ?
               <Link href={'/signup'}>
                 <Button>
@@ -26,7 +32,7 @@ export async function Header() {
                 </Button>
               </Link>
               :
-              <Link href={'/signin'}>
+              <Link href={'/login'}>
                 <Button>
                   Login
                 </Button>
