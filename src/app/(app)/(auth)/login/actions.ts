@@ -14,7 +14,7 @@ export const login = createServerAction()
 
     console.log(input)
     try {
-      await authService.signIn(input)
+      await authService.signInWithEmail(input)
     } catch (error) {
       if (error instanceof AuthError) {
         throw new ZSAError("ERROR", "Invalid credentials, cause: " + error)

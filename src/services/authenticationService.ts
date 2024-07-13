@@ -34,12 +34,17 @@ export class AuthenticationService {
     }
   }
 
-  async signIn(credentials: SignInType) {
+  async signInWithEmail({ email, password }: SignInType) {
     const supabase = await createClient()
+
+    console.log({ email, password })
+
     const { error } = await supabase.auth.signInWithPassword({
-      email: credentials.email,
-      password: credentials.password
+      email,
+      password
     })
+
+    console.log(error)
 
     if (error) {
       throw new AuthError("Invalid credentials")
@@ -64,6 +69,15 @@ export class AuthenticationService {
     }
 
     return data
+  }
+
+  async logout() {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signOut()
+
+    if (error) {
+      throw new Error("Ops, there was an error")
+    }
   }
 }
 

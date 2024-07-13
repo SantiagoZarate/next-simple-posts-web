@@ -1,42 +1,29 @@
-import Link from "next/link"
-import { Button } from "../ui/button"
-import { NavLinksBar } from "./NavLinksBar"
-import { ServiceLocator } from "@/services/serviceLocator"
-import { createClient } from "@/utils/supabase/server"
-import { redirect } from "next/navigation"
+import { createClient } from "@/utils/supabase/server";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { LoggedSection } from "./LoggedSection";
+import { LoginButton } from "./LoginButton";
+import { NavLinksBar } from "./NavLinksBar";
 
 export async function Header() {
-  // const authService = ServiceLocator.getService("AuthenticationService")
-  // const { id } = await authService.userSession()
-  const supabase = await createClient()
-  const { data, error } = await supabase.auth.getUser()
-  const isLogged = data.user !== null
-  console.log(data.user)
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  console.log(user)
 
   return (
     <header className="absolute  w-full px-8 py-6">
       <div className="w-full flex justify-between items-center max-w-screen-lg mx-auto">
         <NavLinksBar />
         <div className="flex gap-4">
-          <Link href={"/posts/create"}>
-            <Button>
+          <Link href={user === null ? "" : "/posts/create"}>
+            <Button disabled={user === null}>
               create post
             </Button>
           </Link>
           {
-            isLogged
-              ?
-              <Link href={'/signup'}>
-                <Button>
-                  Logout
-                </Button>
-              </Link>
-              :
-              <Link href={'/login'}>
-                <Button>
-                  Login
-                </Button>
-              </Link>
+            user
+              ? <LoggedSection username={user.user_metadata.username} />
+              : <LoginButton />
           }
         </div>
       </div>
