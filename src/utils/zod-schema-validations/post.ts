@@ -8,3 +8,5 @@ export const createPostSchema = z.object({
     message: "Username must be at least 10 characters.",
   })
 })
+
+export type CreateaPostSchema = z.infer<typeof createPostSchema>

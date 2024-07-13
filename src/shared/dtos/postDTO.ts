@@ -1,6 +1,5 @@
-import { RawCategory, RawPost } from "@/types/supabase";
-import { CategoryDTO } from "./categoryDTO";
 import { RawPostWithCategorys } from "@/types/post";
+import { CategoryDTO } from "./categoryDTO";
 
 export class PostDTO {
   constructor(
@@ -27,11 +26,13 @@ export class PostDTO {
   }
 
   static fromData({ title, content, id, category }: RawPostWithCategorys) {
+    const mappedCategories = category?.map(cat => CategoryDTO.fromData(cat))
+    console.log("Mapping objects")
     return new PostDTO(
       id,
       title,
       content,
-      category.map(cat => CategoryDTO.fromData(cat))
+      mappedCategories
     )
   }
 }

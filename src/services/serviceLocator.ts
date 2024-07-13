@@ -1,14 +1,18 @@
-import { PostService } from "./postService"
-import { AuthenticationService } from "./authenticationService"
+import { CategoryRepository } from "@/repository/CategoryRepository";
 import { PostRepository } from "@/repository/PostRepository";
+import { AuthenticationService } from "./authenticationService";
+import { CategoryService } from "./categoryService";
+import { PostService } from "./postService";
 
 interface ServiceMap {
   PostService: PostService;
   AuthenticationService: AuthenticationService;
+  CategoryService: CategoryService
 };
 
 interface RepositoryMap {
-  PostRepository: PostRepository
+  PostRepository: PostRepository;
+  CategoryRepository: CategoryRepository
 }
 
 export class ServiceLocator {
@@ -20,11 +24,16 @@ export class ServiceLocator {
     PostService: () => {
       const postRepository = this.getOrCreateRepository("PostRepository");
       return new PostService(postRepository);
+    },
+    CategoryService: () => {
+      const categoryRepository = this.getOrCreateRepository("CategoryRepository")
+      return new CategoryService(categoryRepository);
     }
   }
 
   private static _repositoryFactory: { [K in keyof RepositoryMap]: () => RepositoryMap[K] } = {
-    PostRepository: () => new PostRepository()
+    PostRepository: () => new PostRepository(),
+    CategoryRepository: () => new CategoryRepository()
   }
 
   private static getOrCreateRepository<T extends keyof RepositoryMap>(repositoryName: T) {
