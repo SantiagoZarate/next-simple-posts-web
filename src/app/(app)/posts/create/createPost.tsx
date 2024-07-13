@@ -21,7 +21,6 @@ import { toast } from "@/app/components/ui/use-toast"
 import { CategoryDTO } from "@/shared/dtos/categoryDTO"
 import { CreateaPostSchema, createPostSchema } from "@/utils/zod-schema-validations/post"
 import { Fish } from "lucide-react"
-import { useState } from "react"
 
 interface Props {
   categories: ReturnType<CategoryDTO["toPlainObject"]>[]
@@ -34,13 +33,12 @@ export function CreatePostForm({ categories }: Props) {
     icon: Fish
   }))
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
   const form = useForm<CreateaPostSchema>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
       title: "",
-      content: ""
+      content: "",
+      category: []
     }
   })
 
@@ -55,7 +53,7 @@ export function CreatePostForm({ categories }: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(execute)} className="space-y-8">
+      <form onSubmit={form.handleSubmit((data) => execute(data))} className="space-y-8">
         <FormField
           control={form.control}
           name="title"
@@ -88,15 +86,27 @@ export function CreatePostForm({ categories }: Props) {
             </FormItem>
           )}
         />
-
-        <MultiSelect
-          options={categoriesList}
-          onValueChange={setSelectedCategories}
-          defaultValue={selectedCategories}
-          placeholder="Select frameworks"
-          variant="inverted"
-          animation={2}
-          maxCount={3}
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <MultiSelect
+                  {...field}
+                  options={categoriesList}
+                  onValueChange={(e) => form.setValue("category", e)}
+                  defaultValue={[]}
+                  placeholder="Select frameworks"
+                  variant="inverted"
+                  animation={2}
+                  maxCount={3}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
         <Button type="submit">Submit</Button>
       </form>

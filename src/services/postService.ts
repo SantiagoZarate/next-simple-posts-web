@@ -52,12 +52,13 @@ export class PostService {
     return results
   }
 
-  async update({ content, id, title }: PostUpdate) {
+  async update({ content, id, title, category }: PostUpdate) {
     const oldPost = await this.getPostForUser({ id })
 
     const newPost: PostInsert = {
       content: content ?? oldPost.content,
-      title: title ?? oldPost.title
+      title: title ?? oldPost.title,
+      category
     }
 
     const updatedPost = await this._postRepository.update({ id }, newPost)

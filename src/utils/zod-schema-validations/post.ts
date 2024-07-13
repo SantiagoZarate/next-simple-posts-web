@@ -6,6 +6,9 @@ export const createPostSchema = z.object({
   }),
   content: z.string().min(10, {
     message: "Username must be at least 10 characters.",
+  }),
+  category: z.string().array().min(1, {
+    message: "Must select at least one category"
   })
 })
 

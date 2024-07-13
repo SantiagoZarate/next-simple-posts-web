@@ -25,7 +25,7 @@ export const createPost = authenticatedProcedure
       throw new ZSAError("ERROR", error)
     }
 
-    redirect(`/app/post/${newPost.id}`)
+    redirect(`/posts/${newPost.id}`)
   })
 
 export const deletePost = authenticatedProcedure

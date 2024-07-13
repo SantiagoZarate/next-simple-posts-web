@@ -49,12 +49,17 @@ export class AuthenticationService {
     return res
   }
 
-  async signUp({ email, password }: SignUpType) {
+  async signUp({ email, password, username }: SignUpType) {
     const supabase = await createClient()
 
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          username
+        }
+      }
     })
 
     if (error) {

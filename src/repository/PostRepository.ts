@@ -45,18 +45,39 @@ export class PostRepository implements IPostRepository {
 
   async create(data: PostInsert, userID: string) {
     const db = await createClient()
+    console.log("Inserting new post")
 
-    const res = await db
-      .from(this._tableName)
-      .insert(data)
-      .select()
+    const postrRes = await db
+      .from("post")
+      .insert({
+        content: data.content,
+        title: data.title,
+        created_by: userID
+      })
+      .select("*")
       .single()
 
-    if (res.error) {
+    data.category.forEach(async (category) => {
+      const categoryRes = await db
+        .from("category")
+        .select("id")
+        .eq("name", category)
+        .single()
+
+      const postCategoryRes = await db
+        .from("post_category")
+        .insert({
+          post_id: postrRes.data.id,
+          category_id: categoryRes.data!.id
+        })
+    })
+
+
+    if (postrRes.error) {
       throw new Error("Error creating a new post")
     }
 
-    return PostDTO.fromData(res.data)
+    return PostDTO.fromData(postrRes.data)
   }
 
   async getAll() {

@@ -26,14 +26,21 @@ export class PostDTO {
   }
 
   static fromData({ title, content, id, category }: RawPostWithCategorys) {
-    const mappedCategories = category?.map(cat => CategoryDTO.fromData(cat))
-    console.log("Mapping objects")
     return new PostDTO(
       id,
       title,
       content,
-      mappedCategories
+      category?.map(cat => CategoryDTO.fromData(cat))
     )
+  }
+
+  toPlainObject() {
+    return {
+      title: this._title,
+      content: this._content,
+      id: this._id,
+      category: this._category
+    }
   }
 }
 
