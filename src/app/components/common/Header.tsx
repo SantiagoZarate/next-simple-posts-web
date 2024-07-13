@@ -8,7 +8,6 @@ import { NavLinksBar } from "./NavLinksBar";
 export async function Header() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  console.log(user)
 
   return (
     <header className="absolute  w-full px-8 py-6">

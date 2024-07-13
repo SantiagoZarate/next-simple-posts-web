@@ -4,14 +4,12 @@ import { ServiceLocator } from "@/services/serviceLocator";
 import { createPostSchema } from "../../utils/zod-schema-validations/post";
 import { authenticatedProcedure } from "../../utils/zsa-procedures";
 import { redirect } from "next/navigation";
-import { ZSAError } from "zsa";
+import { ZSAError, createServerAction } from "zsa";
 import { CreatePostError } from "@/shared/errors/postErrors";
 
-export const createPost = authenticatedProcedure
-  .createServerAction()
+export const createPost = createServerAction()
   .input(createPostSchema)
   .handler(async ({ input }) => {
-    console.log("Creando post")
     const postService = ServiceLocator.getService("PostService")
 
     let newPost;
