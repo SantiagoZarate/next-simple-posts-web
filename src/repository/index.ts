@@ -2,7 +2,6 @@ import { CategoryDTO } from "@/shared/dtos/categoryDTO";
 import { PostDTO } from "@/shared/dtos/postDTO";
 import { CategoryDelete, CategoryInsert } from "@/types/category";
 import { PostDelete, PostInsert } from "@/types/post";
-import { create } from "domain";
 
 export interface IPostRepository {
   getAll(): Promise<PostDTO[]>
@@ -14,6 +13,8 @@ export interface IPostRepository {
   update(id: Pick<PostDTO, "id">, newData: PostInsert): Promise<PostDTO>
 
   getById(id: Pick<PostDTO, "id">): Promise<PostDTO>
+
+  getByUser(userID: string): Promise<PostDTO[]>
 }
 
 export interface ICategoryRepository {

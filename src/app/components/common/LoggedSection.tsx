@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { LogoutButton } from "./LogoutButton";
 
 interface Props {
@@ -8,7 +9,9 @@ export function LoggedSection({ username }: Props) {
   return (
     <section className="flex items-center gap-2">
       <LogoutButton />
-      <p className="text-sm">{username}</p>
+      <Link href={"/dashboard"}>
+        <p className="text-sm">{username}</p>
+      </Link>
     </section>
   )
 }

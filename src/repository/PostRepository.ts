@@ -2,13 +2,26 @@ import { PostDTO } from "@/shared/dtos/postDTO"
 import { PostDelete, PostInsert } from "@/types/post"
 import { createClient } from "@/utils/supabase/server"
 import { IPostRepository } from "."
-import { Tables } from "../../supabase/types.gen"
-import { RawPost } from "@/types/supabase"
+import error from "next/error"
 
 export class PostRepository implements IPostRepository {
   private _tableName = "post"
 
   constructor() { }
+
+  async getByUser(userID: string): Promise<PostDTO[]> {
+    const db = await createClient()
+    const { data, error } = await db
+      .from(this._tableName)
+      .select("*")
+      .eq("created_by", userID)
+
+    if (error) {
+      throw new Error("There was an error getting posts from user")
+    }
+
+    return data.map(d => PostDTO.fromData(d))
+  }
 
   async delete({ id }: PostDelete): Promise<PostDTO> {
     const db = await createClient()
@@ -20,6 +33,7 @@ export class PostRepository implements IPostRepository {
       .single()
 
     if (error) {
+      console.log(error)
       throw new Error("Error while deleting post")
     }
 

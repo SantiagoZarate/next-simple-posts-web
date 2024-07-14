@@ -6,7 +6,8 @@ export class PostDTO {
     private _id: number,
     private _title: string,
     private _content: string,
-    private _category: CategoryDTO[]
+    private _category: CategoryDTO[],
+    private _createdBy: string
   ) { }
 
   public get title() {
@@ -25,12 +26,17 @@ export class PostDTO {
     return this._content
   }
 
-  static fromData({ title, content, id, category }: RawPostWithCategorys) {
+  public get createdBy() {
+    return this._createdBy
+  }
+
+  static fromData({ title, content, id, category, created_by }: RawPostWithCategorys) {
     return new PostDTO(
       id,
       title,
       content,
-      category?.map(cat => CategoryDTO.fromData(cat))
+      category?.map(cat => CategoryDTO.fromData(cat)),
+      created_by!
     )
   }
 

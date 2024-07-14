@@ -23,6 +23,12 @@ export class PostService {
     return results
   }
 
+  async getByUser(): Promise<PostDTO[]> {
+    const { id } = await this._authService.getUser()
+    const posts = await this._postRepository.getByUser(id);
+    return posts;
+  }
+
   async delete({ id }: PostDelete): Promise<PostDTO> {
     const post = await this.getPostForUser({ id });
     const results = await this._postRepository.delete({ id: post.id })
@@ -39,9 +45,9 @@ export class PostService {
     const post = await this._postRepository.getById({ id })
 
     // TODO: add property to post to know if user created it
-    // if (post.created_by !== user) {
-    //   throw new Error("Bad Request: invalid credentials")
-    // }
+    if (post.createdBy !== user.id) {
+      throw new Error("Bad Request: invalid credentials")
+    }
 
     return post
   }

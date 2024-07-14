@@ -28,22 +28,33 @@ export type Database = {
         Row: {
           content: string
           created_at: string
+          created_by: string | null
           id: number
           title: string
         }
         Insert: {
           content: string
           created_at?: string
+          created_by?: string | null
           id?: number
           title: string
         }
         Update: {
           content?: string
           created_at?: string
+          created_by?: string | null
           id?: number
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "post_created_by_fkey1"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       post_category: {
         Row: {
