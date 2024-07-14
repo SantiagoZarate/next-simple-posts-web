@@ -7,6 +7,6 @@ export async function FetchCategories() {
   const categories: CategoryDTO[] = await categoryService.getAll()
 
   return (
-    <CreatePostForm categories={categories.map(cat => cat.toPlainObject())} />
+    <CreatePostForm categories={categories} />
   )
 }

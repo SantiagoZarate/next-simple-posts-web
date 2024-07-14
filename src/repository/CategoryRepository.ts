@@ -1,4 +1,4 @@
-import { CategoryDTO } from '@/shared/dtos/categoryDTO';
+import { CategoryDTO, categorySchemaDTO } from '@/shared/dtos/categoryDTO';
 import { type ICategoryRepository } from '.'
 import { createClient } from '@/utils/supabase/server';
 import { CategoryDelete, CategoryInsert } from '@/types/category';
@@ -17,7 +17,7 @@ export class CategoryRepository implements ICategoryRepository {
       throw new Error("Error getting all the categories")
     }
 
-    const categories = data.map(d => CategoryDTO.fromData(d))
+    const categories = data.map(d => categorySchemaDTO.parse(d))
     return categories
   }
 
@@ -34,7 +34,7 @@ export class CategoryRepository implements ICategoryRepository {
       throw new Error("Error getting all the categories")
     }
 
-    return CategoryDTO.fromData(data)
+    return categorySchemaDTO.parse(data)
   }
 
   async delete({ id }: CategoryDelete): Promise<CategoryDTO> {
@@ -50,6 +50,6 @@ export class CategoryRepository implements ICategoryRepository {
       throw new Error("Error getting all the categories")
     }
 
-    return CategoryDTO.fromData(data)
+    return categorySchemaDTO.parse(data)
   }
 }
